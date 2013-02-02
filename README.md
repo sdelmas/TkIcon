@@ -452,6 +452,6 @@ To retrieve TkIcon, send the following body:
 Feedback (Author):
 -----------------
 Sven Delmas
-sven@cimetrix.com
+sven@ignoranceisbliss.com
 
 
