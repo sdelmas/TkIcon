@@ -1,0 +1,22 @@
+global nodeCounter
+global edgeCounter
+global layouter
+set nodeCounter 15
+set edgeCounter 15
+set layouter rectangles
+
+button .layouter.cbcanvas.b1 -text button1
+button .layouter.cbcanvas.b2 -text button2
+
+set a [.layouter.cbcanvas create rectangle 10 20 60 60]
+set b [.layouter.cbcanvas create rectangle 10 20 60 60]
+set c [.layouter.cbcanvas create rectangle 10 20 60 60]
+set d [.layouter.cbcanvas create bitmap 10 20 -bitmap gray50 -anchor nw]
+set e [.layouter.cbcanvas create arc 10 20 60 60]
+set f [.layouter.cbcanvas create oval 10 20 60 60]
+set f [.layouter.cbcanvas create polygon 10 20 60 60 30 20 100 20]
+set g [.layouter.cbcanvas create line 10 20 60 60 30 20 100 20]
+set h [.layouter.cbcanvas create window 10 20 -window .layouter.cbcanvas.b1 -anchor nw]
+set i [.layouter.cbcanvas create window 10 20 -window .layouter.cbcanvas.b2 -anchor nw]
+#.layouter edgecreate mygraph [list $a $b 1 -menu1 layouter -label Edge14 -name Edge14]
+#.layouter edgecreate mygraph [list $b $c 1 -menu1 layouter -label Edge13 -name Edge13]

@@ -1,0 +1,929 @@
+'\"
+'\" Copyright 1995 Sven Delmas
+'\" All rights reserved.
+'\" See the file COPYRIGHT for the copyright notes.
+'\"
+'\" $Header: tkiconpane.n[12.0] Thu Feb  9 15:28:03 1995 garfield@mydomain.de frozen $
+'\" 
+'\" The manual page is based upon the manual page style from:
+'\"
+'\" Copyright (c) 1993 The Regents of the University of California.
+'\" Copyright (c) 1994 Sun Microsystems, Inc.
+'\"
+'\" See the file "license.terms" for information on usage and redistribution
+'\" of this file, and for a DISCLAIMER OF ALL WARRANTIES. This file is
+'\" part of the Tk distribution and is included in the file COPYRIGHT.
+'\" 
+'\" The definitions below are for supplemental macros used in Tcl/Tk
+'\" manual entries.
+'\"
+'\" .HS name section [date [version]]
+'\"	Replacement for .TH in other man pages.  See below for valid
+'\"	section names.
+'\"
+'\" .AP type name in/out [indent]
+'\"	Start paragraph describing an argument to a library procedure.
+'\"	type is type of argument (int, etc.), in/out is either "in", "out",
+'\"	or "in/out" to describe whether procedure reads or modifies arg,
+'\"	and indent is equivalent to second arg of .IP (shouldn't ever be
+'\"	needed;  use .AS below instead)
+'\"
+'\" .AS [type [name]]
+'\"	Give maximum sizes of arguments for setting tab stops.  Type and
+'\"	name are examples of largest possible arguments that will be passed
+'\"	to .AP later.  If args are omitted, default tab stops are used.
+'\"
+'\" .BS
+'\"	Start box enclosure.  From here until next .BE, everything will be
+'\"	enclosed in one large box.
+'\"
+'\" .BE
+'\"	End of box enclosure.
+'\"
+'\" .VS
+'\"	Begin vertical sidebar, for use in marking newly-changed parts
+'\"	of man pages.
+'\"
+'\" .VE
+'\"	End of vertical sidebar.
+'\"
+'\" .DS
+'\"	Begin an indented unfilled display.
+'\"
+'\" .DE
+'\"	End of indented unfilled display.
+'\"
+'\" @(#) man.macros 1.1 94/08/09 13:07:19
+.\"
+'\"	# Heading for Tcl/Tk man pages
+.de HS
+.ds ^3 \\0
+.if !"\\$3"" .ds ^3 \\$3
+.if '\\$2'cmds'      .TH "\\$1" 1 "\\*(^3" "\\$4" "\\$5"
+.if '\\$2'lib'       .TH "\\$1" 3 "\\*(^3" "\\$4" "\\$5"
+.if '\\$2'ncmds'     .TH "\\$1" n "\\*(^3" "\\$4" "\\$5"
+.if '\\$2'tcl'       .TH "\\$1" n "\\*(^3"  Tcl   "Tcl Built-In Commands"
+.if '\\$2'tk'        .TH "\\$1" n "\\*(^3"  Tk    "Tk Commands"
+.if '\\$2'tclc'      .TH "\\$1" 3 "\\*(^3"  Tcl   "Tcl Library Procedures"
+.if '\\$2'tkc'       .TH "\\$1" 3 "\\*(^3"  Tk    "Tk Library Procedures"
+.if '\\$2'tclcmds'   .TH "\\$1" 1 "\\*(^3"  Tk    "Tcl Applications"
+.if '\\$2'tkcmds'    .TH "\\$1" 1 "\\*(^3"  Tk    "Tk Applications"
+.if t .wh -1.3i ^B
+.nr ^l \\n(.l
+.ad b
+..
+'\"	# Start an argument description
+.de AP
+.ie !"\\$4"" .TP \\$4
+.el \{\
+.   ie !"\\$2"" .TP \\n()Cu
+.   el          .TP 15
+.\}
+.ie !"\\$3"" \{\
+.ta \\n()Au \\n()Bu
+\&\\$1	\\fI\\$2\\fP	(\\$3)
+.\".b
+.\}
+.el \{\
+.br
+.ie !"\\$2"" \{\
+\&\\$1	\\fI\\$2\\fP
+.\}
+.el \{\
+\&\\fI\\$1\\fP
+.\}
+.\}
+..
+'\"	# define tabbing values for .AP
+.de AS
+.nr )A 10n
+.if !"\\$1"" .nr )A \\w'\\$1'u+3n
+.nr )B \\n()Au+15n
+.\"
+.if !"\\$2"" .nr )B \\w'\\$2'u+\\n()Au+3n
+.nr )C \\n()Bu+\\w'(in/out)'u+2n
+..
+'\"	# BS - start boxed text
+'\"	# ^y = starting y location
+'\"	# ^b = 1
+.de BS
+.br
+.mk ^y
+.nr ^b 1u
+.if n .nf
+.if n .ti 0
+.if n \l'\\n(.lu\(ul'
+.if n .fi
+..
+'\"	# BE - end boxed text (draw box now)
+.de BE
+.nf
+.ti 0
+.mk ^t
+.ie n \l'\\n(^lu\(ul'
+.el \{\
+.\"	Draw four-sided box normally, but don't draw top of
+.\"	box if the box started on an earlier page.
+.ie !\\n(^b-1 \{\
+\h'-1.5n'\L'|\\n(^yu-1v'\l'\\n(^lu+3n\(ul'\L'\\n(^tu+1v-\\n(^yu'\l'|0u-1.5n\(ul'
+.\}
+.el \}\
+\h'-1.5n'\L'|\\n(^yu-1v'\h'\\n(^lu+3n'\L'\\n(^tu+1v-\\n(^yu'\l'|0u-1.5n\(ul'
+.\}
+.\}
+.fi
+.br
+.nr ^b 0
+..
+'\"	# VS - start vertical sidebar
+'\"	# ^Y = starting y location
+'\"	# ^v = 1 (for troff;  for nroff this doesn't matter)
+.de VS
+.mk ^Y
+.ie n 'mc \s12\(br\s0
+.el .nr ^v 1u
+..
+'\"	# VE - end of vertical sidebar
+.de VE
+.ie n 'mc
+.el \{\
+.ev 2
+.nf
+.ti 0
+.mk ^t
+\h'|\\n(^lu+3n'\L'|\\n(^Yu-1v\(bv'\v'\\n(^tu+1v-\\n(^Yu'\h'-|\\n(^lu+3n'
+.sp -1
+.fi
+.ev
+.\}
+.nr ^v 0
+..
+'\"	# Special macro to handle page bottom:  finish off current
+'\"	# box/sidebar if in box/sidebar mode, then invoked standard
+'\"	# page bottom macro.
+.de ^B
+.ev 2
+'ti 0
+'nf
+.mk ^t
+.if \\n(^b \{\
+.\"	Draw three-sided box if this is the box's first page,
+.\"	draw two sides but no top otherwise.
+.ie !\\n(^b-1 \h'-1.5n'\L'|\\n(^yu-1v'\l'\\n(^lu+3n\(ul'\L'\\n(^tu+1v-\\n(^yu'\h'|0u'\c
+.el \h'-1.5n'\L'|\\n(^yu-1v'\h'\\n(^lu+3n'\L'\\n(^tu+1v-\\n(^yu'\h'|0u'\c
+.\}
+.if \\n(^v \{\
+.nr ^x \\n(^tu+1v-\\n(^Yu
+\kx\h'-\\nxu'\h'|\\n(^lu+3n'\ky\L'-\\n(^xu'\v'\\n(^xu'\h'|0u'\c
+.\}
+.bp
+'fi
+.ev
+.if \\n(^b \{\
+.mk ^y
+.nr ^b 2
+.\}
+.if \\n(^v \{\
+.mk ^Y
+.\}
+..
+'\"	# DS - begin display
+.de DS
+.RS
+.nf
+.sp
+..
+'\"	# DE - end display
+.de DE
+.fi
+.RE
+.sp
+..
+.HS tkiconpane cmds
+.BS
+'\" Note:  do not modify the .SH NAME line immediately below!
+.SH NAME
+tkiconpane \- Create and manipulate tkiconpane widgets
+.SH SYNOPSIS
+\fBtkiconpane\fI \fIpathName \fR?\fIoptions\fR?
+.SH "STANDARD OPTIONS"
+.LP
+.nf
+.ta 4c 8c 12c
+\fBactivebackground\fR	\fBcursor\fR	\fBpadx\fR
+\fBactiveforeground\fR	\fBfont\fR	\fBpady\fR
+\fBbackground\fR	\fBforeground\fR
+.fi
+.LP
+See the ``options'' manual entry for details on the standard options.
+.SH "WIDGET-SPECIFIC OPTIONS"
+.LP
+.nf
+Name:	\fBbindType\fR
+Class:	\fBBindType\fR
+Command-Line Switch:	\fB\-bindtype\fR
+.fi
+.IP
+This option specifies which default bindings are to be used.
+The value 0 represents the default type. Look into the
+bindings section to see which values are possible.
+.LP
+.nf
+Name:	\fBcanvasBoxTag\fR
+Class:	\fBTag\fR
+Command-Line Switch:	\fB\-canvasboxtag\fR
+.fi
+.IP
+This option contains the canvas id of the status box tag.
+Please do not set this option.
+.LP
+.nf
+Name:	\fBcanvasPath\fR
+Class:	\fBPath\fR
+Command-Line Switch:	\fB\-canvaspath\fR
+.fi
+.IP
+This option contains the canvas widget path. Please do not
+set this option.
+.LP
+.nf
+Name:	\fBcanvasStatusTag\fR
+Class:	\fBTag\fR
+Command-Line Switch:	\fB\-canvasstatustag\fR
+.fi
+.IP
+This option contains the canvas id of the status text tag.
+Please do not set this option.
+.LP
+.nf
+Name:	\fBchanged\fR
+Class:	\fBChanged\fR
+Command-Line Switch:	\fB\-changed\fR
+.fi
+.IP
+When this option is set to 1, the exclamation mark at the
+upper right corner is displayed. This indicates that
+something has changed which requires the user's attention.
+Setting the option to 0 removes the exclamation mark. This
+can also be done by pressing at the exclamation mark. 
+.LP
+.nf
+Name:	\fBclickInterval\fR
+Class:	\fBClickInterval\fR
+Command-Line Switch:	\fB\-clickinterval\fR
+.fi
+.IP
+This option specifies the click interval in milli seconds
+that is needed to recognize a double click.
+.LP
+.nf
+Name:	\fBcompressIconInfo\fR
+Class:	\fBCompressIconInfo\fR
+Command-Line Switch:	\fB\-compressiconinfo\fR
+.fi
+.IP
+Turns on/off the compressing of the icon information that is
+returned when the icon item configuration is retrieved.
+.LP
+.nf
+Name:	\fBcomputeIconSize\fR
+Class:	\fBComputeIconSize\fR
+Command-Line Switch:	\fB\-computeiconsize\fR
+.fi
+.IP
+To let the widget compute the required icon size, set this
+option to 1. This means that the maximum required size is
+used for all icons. If the option is set to 0, the icon size
+specified with \fB-iconheight\fR and \fB-iconwidth\fR is
+used (these options are updated when the widget computes the
+icon size).
+.LP
+.nf
+Name:	\fBdragDrop\fR
+Class:	\fBDragDrop\fR
+Command-Line Switch:	\fB\-dragdrop\fR
+.fi
+.IP
+When this option is set to 1 and the drag&drop command is
+available, this feature is used. Otherwise, no drag&drop is
+available.
+.LP
+.nf
+Name:	\fBdropCommand\fR
+Class:	\fBCommand\fR
+Command-Line Switch:	\fB\-dropcommand\fR
+.fi
+.IP
+When the wish supports drag&drop, this command is called
+when a tkiconpane icon is dropped into an iconpane. This
+command receives six parameters. The first parameter is the
+name of the interpreter where the icon comes from. The
+second parameter is the iconpane widget path where the icon
+comes from. The third parameter specifies the source icon
+id (canvas id) in this iconpane. The fourth parameter is the
+copy/move mode of the drag operation. The string ''copy''
+indicates a copy operation (started with the corresponding
+mouse event), and the second string ''move'' indicates
+a move operation. The fifth parameter is the name of the
+iconpane where the icon has been dropped. The last parameter
+is the target icon id (canvas id) where the icon has been
+dropped. For an iconpane drop command, this parameter is
+always empty, as the drop has not been done over an icon.
+.LP
+.nf
+Name:	\fBedgeFont?\fR
+Class:	\fBEdgeFont\fR
+Command-Line Switch:	\fB\-edgefont?\fR
+.fi
+.IP
+Specifies the fontname that is used to display the labels
+in the edges. Possible names are \fBedgefont1\fR to
+\fBedgefont5\fR, where \fBedgefont1\fR refers to the
+smallest font and \fBedgefont5\fR refers to the biggest
+font.
+.LP
+.nf
+Name:	\fBedgeOrder\fR
+Class:	\fBEdgeOrder\fR
+Command-Line Switch:	\fB\-edgeorder\fR
+.fi
+.IP
+If this option is set to 1, the edges are attached to the
+nodes at the corresponding side of the node (according to
+the graph order). Otherwise, the edges are attached to the
+closest side of the node.
+.LP
+.nf
+Name:	\fBgraphOrder\fR
+Class:	\fBGraphOrder\fR
+Command-Line Switch:	\fB\-graphorder\fR
+.fi
+.IP
+If this option is set to 1, the graph is ordered top down.
+Otherwise the graph is layouted left to right. 
+.LP
+.nf
+Name:	\fBheight\fR
+Class:	\fBHeight\fR
+Command-Line Switch:	\fB\-height\fR
+.fi
+.IP
+Specifies the desired height of the window in pixels.
+.LP
+.nf
+Name:	\fBiconFont?\fR
+Class:	\fBIconFont\fR
+Command-Line Switch:	\fB\-iconfont?\fR
+.fi
+.IP
+Specifies the fontname that is used to display the labels
+beneath the icons. Possible names are \fBiconfont1\fR to
+\fBiconfont5\fR, where \fBiconfont1\fR refers to the
+smallest font and \fBiconfont5\fR refers to the biggest
+font.
+.LP
+.nf
+Name:	\fBiconHeight\fR
+Class:	\fBIconHeight\fR
+Command-Line Switch:	\fB\-iconheight\fR
+.fi
+.IP
+Specifies the height of all icons. After setting this
+option, the icons are re-layouted.
+.LP
+.nf
+Name:	\fBiconSpaceH\fR
+Class:	\fBIconSpace\fR
+Command-Line Switch:	\fB\-iconspaceh\fR
+.fi
+.IP
+Specifies the horizontal space between the icons. After
+setting this option, the icons are re-layouted.
+.LP
+.nf
+Name:	\fBiconSpaceV\fR
+Class:	\fBIconSpace\fR
+Command-Line Switch:	\fB\-iconspacev\fR
+.fi
+.IP
+Specifies the vertical space between the icons. After
+setting this option, the icons are re-layouted.
+.LP
+.nf
+Name:	\fBiconWidth\fR
+Class:	\fBIconWidth\fR
+Command-Line Switch:	\fB\-iconwidth\fR
+.fi
+.IP
+Specifies the width of all icons. After setting this option,
+the icons are re-layouted.
+.LP
+.nf
+Name:	\fBlayout\fR
+Class:	\fBLayout\fR
+Command-Line Switch:	\fB\-layout\fR
+.fi
+.IP
+Enables/disables the layout in the widget. If this option
+is set to 0, layout is not done. If the layout is
+activated via the widget command layout, the layout is
+forced (this option is ignored).
+.LP
+.nf
+Name:	\fBlayoutCommand\fR
+Class:	\fBCommand\fR
+Command-Line Switch:	\fB\-layoutcommand\fR
+.fi
+.IP
+This command is used to layout the canvas icon items. If the
+layout command contains no value, the icons are layouted
+in a matrix. The layout command "nolayout" means that no
+layout is done. Any other layout command specifies a Tcl
+command that layouts the icons. The procedure gets one
+parameter which is the canvas widget path. If the canvas
+contains a graph, the layout procedure also has to rearrange
+the edges.
+.LP
+.nf
+Name:	\fBlayoutUpdate\fR
+Class:	\fBLayoutUpdate\fR
+Command-Line Switch:	\fB\-layoutupdate\fR
+.fi
+.IP
+Enables/disables the automatic relayout of the iconpane
+when the canvas widget is resized. This option accepts the
+values 1 and 0 to turn on and off this feature.
+.LP
+.nf
+Name:	\fBmenu?\fR
+Class:	\fBMenu\fR
+Command-Line Switch:	\fB\-menu?\fR
+.fi
+.IP
+This option specifies a menu widget which is used as the
+iconpane main menu. Possible names are \fBmenu1\fR to
+\fBmenu3\fR, where \fBmenu1\fR refers to the standard menu
+accessed via "mouse button 3", \fBmenu2\fR is a menu with
+additional functionality accessed via "meta mouse button 3",
+and \fBmenu3\fR is another additional menu accessible via
+"control mouse button 3".  The menu definition files are
+accessed by the specified menu name. The name of the menu
+definition file is "<-menu?>.vmenu". The file contains a
+menu definition following the following rules. The menu is
+created with the procedure \fBtkiconpane_createViewMenu\fR.
+This procedure gets the name of the popup as parameter. The
+pathname must begin with ".vmenu-". The return value is the
+pathname of the menu, and is used to add the menu items.
+.LP
+.nf
+Name:	\fBmenuBar\fR
+Class:	\fBMenu\fR
+Command-Line Switch:	\fB\-menubar\fR
+.fi
+.IP
+Setting this value to a menu name when the widget is created
+means that the main menubar will contain the menubuttons
+specified in the corresponding menubar file. Otherwise the
+menubar is not created. The menu definition files are
+accessed by the specified menubar name. The name of the file
+is "<-menubar>.mbar". The file contains a menu definition
+following the following rules. The menubar is created with
+the procedure \fBtkiconpane_createMenubutton\fR. This
+procedure is configured with the standard menubutton
+options. The return value is the pathname of the
+automatically created menu, and is used to add the menu
+items.
+.LP
+.nf
+Name:	\fBmenuPath\fR
+Class:	\fBMenuPath\fR
+Command-Line Switch:	\fB\-menupath\fR
+.fi
+.IP
+This option contains a list of pathnames where the iconpane
+specific menus can be found. Here the widget looks for view
+menu, and menubar definition files.
+.LP
+.nf
+Name:	\fBmoveFuzzy\fR
+Class:	\fBMoveFuzzy\fR
+Command-Line Switch:	\fB\-movefuzzy\fR
+.fi
+.IP
+Specifies the amount of pixels that an icon has to be moved
+before this move operation is accepted.
+.LP
+.nf
+Name:	\fBname\fR
+Class:	\fBName\fR
+Command-Line Switch:	\fB\-name\fR
+.fi
+.IP
+This option contains the name of the iconpane.
+.LP
+.nf
+Name:	\fBplacing\fR
+Class:	\fBPlacing\fR
+Command-Line Switch:	\fB\-placing\fR
+.fi
+.IP
+Setting this option to 1 makes it possible to move the
+icons. If the option is set to 0, icons cannot be moved.
+.LP
+.nf
+Name:	\fBactiveForeground\fR
+Class:	\fBBackground\fR
+Command-Line Switch:	\fB\-scrollactiveforeground\fR
+.fi
+.IP
+This color is used as the active foreground color in the
+scrollbars.
+.LP
+.nf
+Name:	\fBscale\fR
+Class:	\fBScale\fR
+Command-Line Switch:	\fB\-scale\fR
+.fi
+.IP
+This value specifies the scaling factor for the graph. A
+value between 0 and 1 reduces the graph. A value of 1
+sizes the graph to normal size. A value above 1 increases
+the size of the graph. Setting the scale to -1 automatically
+sizes the graph to fit into the current canvas size.
+.LP
+.nf
+Name:	\fBscrollSide\fR
+Class:	\fBScrollSide\fR
+Command-Line Switch:	\fB\-scrollside\fR
+.fi
+.IP
+If this option is set to "left", the vertical scrollbar is
+placed at the left side. If the value is "right", the
+vertical scrollbar is placed at the right side.
+.LP
+.nf
+Name:	\fBselectCommand\fR
+Class:	\fBCommand\fR
+Command-Line Switch:	\fB\-selectcommand\fR
+.fi
+.IP
+This command is called every time an icon or an edge is
+selected. The procedure receives the icon id and the edge
+id as parameters.
+.LP
+.nf
+Name:	\fBsortCommand\fR
+Class:	\fBCommand\fR
+Command-Line Switch:	\fB\-sortcommand\fR
+.fi
+.IP
+This command specifies a procedure that is called to sort
+the icons when the internal matrix display is used. The
+procedure gets the canvas widget path name, and a list of
+all canvas icon items.
+.LP
+.nf
+Name:	\fBstatusAfter\fR
+Class:	\fBStatusAfter\fR
+Command-Line Switch:	\fB\-statusafter\fR
+.fi
+.IP
+The given time (in milli seconds) is the interval in which
+the status text is visible. After this time, the status text
+is removed automatically. If no status variable is
+specified, it is not possible to set the status.
+.LP
+.nf
+Name:	\fBstatusVariable\fR
+Class:	\fBStatusVariable\fR
+Command-Line Switch:	\fB\-statusvariable\fR
+.fi
+.IP
+The given variable name can be used to set the status text
+of the tkiconpane. Setting the status text to {} removes the
+status text. The option \fB-statusafter\fR can be set to a
+time interval for the automatic removal of the status text.
+If no status variable is specified, it is not possible to
+set the status.
+.LP
+.nf
+Name:	\fBtitle\fR
+Class:	\fBtitle\fR
+Command-Line Switch:	\fB\-title\fR
+.fi
+.IP
+Specifies the window title for the corresponding toplevel.
+.LP
+.nf
+Name:	\fBtkIconPath\fR
+Class:	\fBTkIconPath\fR
+Command-Line Switch:	\fB\-tkiconpath\fR
+.fi
+.IP
+Contains a list of directory names where the widget can find
+menu definition files for the icons, pixmap files and status
+files. The menu definition files are accessed by the corresponding
+icon \fB-menu?\fR parameter. The name of the menu definition
+files is "<-menu?>.imn" (icons) or "<-menu?>.emn" (edges). The
+file contains a menu definition following the following rules. The
+menu is created with the procedure \fBtkiconpane_createIconMenu\fR
+or \fBtkiconpane_createEdgeMenu\fR. These procedures get the
+name of the popup as parameter. The pathname must begin with
+".imenu-" or ".emenu-". The return value is the pathname of
+the menu, and is used to add the menu items. The picture files
+are accessed by the icon type (specified with the canvas icon
+option \fB-type\fR). The name of the file is "<iconType>.icn"
+(for icon images) or "<iconStatus>.sts" (for status images). The
+file contains a  pixmap definition in one of the supported pixmap
+types (preferably Xpm3). The value of this resource is automatically
+stored to the global variable named \fBtkicon_lib(pathName)\fR. This
+variable is used by the canvas widget to retrieve the directory list.
+.LP
+.nf
+Name:	\fBtoolbar*\fR
+Class:	\fBToolbar\fR
+Command-Line Switch:	\fB\-toolbar*\fR
+.fi
+.IP
+The options \fBtoolbarbutton\fR, \fBtoolbarleft\fR,
+\fBtoolbarright\fR, and \fBtoolbartop\fR allow the
+specification of a toolbar. A toolbar is almost the same as
+a menubar. The difference is that the toolbars are displayed
+around the iconpane (according to the option name), and the
+items in the toolbar are buttons. The contents of the
+toolbar are specified in the corresponding toolbar file. The
+toolbar definition files are accessed via the specified
+toolbar* name. The name of the file is "<-toolbar*>.tbar".
+The file contains a menu definition following the following
+rules. The menubar is created with the procedure
+\fBtkiconpane_createToolbarButton\fR. This procedure is
+configured with the standard button options. The return
+value is the pathname of the automatically created button,
+and can be used to pack the button. The special new button
+resource \fB-dropcommand\fR allows the specification of a
+drop command that is called when an icon is dropped onto a
+toolbar item. The dropcommand gets three parameters. The
+first parameter is the name of the iconpane where the drag
+operation has been started. The second parameter is the icon
+id that has been dragged, and the last parameter is the
+widget name of the toolbar button that has been targeted.
+The special option \fB-side\fR allows the selection of a
+pack side. Buttons are not packed automatically. The
+variables \fBbuttonside\fR and \fBrevbuttonside\fR contain
+the correct packing side depending on the pack side of
+the toolbar.
+.LP
+.nf
+Name:	\fBtoplevel\fR
+Class:	\fBToplevel\fR
+Command-Line Switch:	\fB\-toplevel\fR
+.fi
+.IP
+Setting this value to 1 when the widget is created means
+that a new toplevel is created. If the value is 0, a
+standard frame widget is used. This option has to be the
+first option in the commandline.
+.LP
+.nf
+Name:	\fBupdateEdges\fR
+Class:	\fBUpdateEdges\fR
+Command-Line Switch:	\fB\-updateedges\fR
+.fi
+.IP
+Setting this value to 1 means that the edges are not
+recomputed when the icons are relayouted. This is important
+when the layout algorithm computes complex positions for the
+edges.
+.LP
+.nf
+Name:	\fBwidth\fR
+Class:	\fBWidth\fR
+Command-Line Switch:	\fB\-width\fR
+.fi
+.IP
+Specifies the desired width of the window in pixels.
+.BE
+
+.SH DESCRIPTION
+.PP
+The \fBtkiconpane\fR command creates a new window (given by the 
+\fIpathName\fR argument) and makes it into a tkiconpane widget.
+Additional options, as described above, may be specified on the
+command line or in the option database to configure aspects
+of the tkiconpane such as its default background color. The
+\fBtkiconpane\fR command returns the path name of the new
+window.
+.PP
+The tkiconpane is a complex widget displaying an (optional)
+menubar and an icon area. Several functionalities are
+provided to make the use of this icon area easy.
+.PP
+To get access to the name and other informations about the
+"current tkiconpane" (the last accessed iconpane), the user
+can use the procedure \fBtkiconpane_info\fR. This procedure 
+takes a specifier to select the return value. Possible
+values are: "tkiconpanename" (for the name of the current
+tkiconpane), "canvaspath" (for the canvas widget path of the
+current tkiconpane), "tkiconpanepath" (for the path name of
+the current tkiconpane), "iconinfo" (for information on
+icons in the tkiconpane) and  "edgeinfo" (for information on
+edges in the tkiconpane); "iconinfo" and "edgeinfo" get
+additional parameters similar to the corresponding widget
+commands.
+.PP
+Menus that are used in the iconpane should be created with
+the corresponding iconpane procedures. The procedure
+\fBtkiconpane_createMenubutton\fR is used to create an
+iconpane menubar button. The procedure gets the name of the
+menubutton as first parameter, followed by a list of
+standard menubutton options. The procedure returns the name
+of the corresponding menu.
+.PP
+To create popup menus attached to the icons, the procedure
+\fBtkiconpane_createIconMenu\fR is used. This procedure gets
+the name of the popup menu as parameter, and returns the
+name of the created popup menu. The procedure
+\fBtkiconpane_createEdgeMenu\fR creates a popup menu
+attached to an edge. The handling is the same as for icon
+popup menus. With the procedure
+\fBtkiconpane_createViewMenu\fR, the user can create popups
+attached to the iconpane. The handling is the same as for
+icon popup menus. To create a toolbar button, the procedure
+\fBtkiconpane_createToolbarButton\fR is used. This procedure
+gets a name, and the standard button options. Also the new
+option \fB-dropcommand\fR can be specified to allow the
+receiving of drop events.
+.PP
+The procedure \fBtkiconpane_receiveIcon\fR is used to
+receive the drag&drop informations. This procedure must be
+present in an application that wants to receive drag&drop
+commands from tkiconpane. The procedure
+\fBtkiconpane_dropPosition\fR gets the name of the receiving
+iconpane, and returns the correct canvas coordinates where
+the drop has been done.
+
+.SH "WIDGET COMMAND"
+.PP
+The \fBtkiconpane\fR command creates a new Tcl command the
+name of which is the same as the path name of the
+tkiconpane's window. This command may be used to invoke
+various operations on the widget. It has the following
+general form:
+.DS C
+\fIpathName option \fR?\fIarg arg ...\fR?
+.DE
+\fIPathName\fR is the name of the command. It is the same as
+the tkiconname widget's path name. \fIOption\fR and the
+\fIarg\fRs determine the exact behavior of the command.  The
+following commands are possible for tkiconpane widgets:
+.TP
+\fIpathName \fBcanvas\fR ?\fIargs\fR?
+This command returns the canvas path of the icon pane, or
+evaluates the given canvas command.
+.TP
+\fIpathName \fBchanged\fR ?\fIstatus\fR?
+This command returns the current change status of the
+tkiconpane, or sets it to the passed change status.
+.TP
+\fIpathName \fBconfigure\fR ?\fIoption\fR? \fI?value option value ...\fR?
+Queries or modifies the configuration options of the widget.
+If no \fIoption\fR is specified, returns a list describing
+all available options for \fIpathName\fR (see
+\fBTk_ConfigureInfo\fR for information on the format of this
+list).  If \fIoption\fR is specified with no \fIvalue\fR,
+the command returns a list describing the one named
+"option" (this list will be identical to the corresponding
+sublist of the value returned if no \fIoption\fR is
+specified).  If one or more \fIoption\-value\fR pairs are
+specified, the command modifies the given widget option(s)
+to have the given value(s); in this case, the command
+returns an empty string. \fIOption\fR may have any of the
+values accepted by the \fBtkiconpane\fR command.
+.TP
+\fIpathName \fBedgeconfigure\fR \fIgraphName\fR ?\fIlineItem\fR? ?\fIoption\fR? ?\fIvalue\fR?
+This command retrieves information about edges, or
+configures the edge items. The parameters of all edges
+forming the specified graph are returned when only the
+graphname is specified. If an edge item is specified, the
+parameters are retrieved/set for this edge. Options can
+be retrieved by specifying the option name (e.g. -fill). To
+set a certain option, append the new value.
+.TP
+\fIpathName \fBedgecreate\fR ?\fIgraphName\fR? ?\fIgraphSpecification\fR?
+This command creates new edges. The graphSpecification is a
+list of lists. These lists are built up as follows: the
+canvas id of the starting icon, the canvas id of the target
+icon and a number indicating the style of the edge (0 = no
+arrows, 1 = arrow to target icon, 2 = arrows on both sides).
+The remaining parameters are passed to the line creation
+command (e.g. -fill red).
+.TP
+\fIpathName \fBedgedelete\fR ?\fIgraphName\fR? ?\fIfromIconId\fR \fItoIconId\fR?
+This command deletes a specified graph, or all graphs in the
+tkiconpane. If the fromIconId and the toIconId parameters are
+specified (giving the canvas ids of two icons), only the
+edge between the two icons is removed.
+.TP
+\fIpathName \fBedgeinfo\fR \fIcommand\fR ?\fIgraphName\fR? ?\fIid1\fR? ?\fIid2\fR?
+This command returns various informations on the currently
+selected edge, or the specified edge or graph. If the
+command "graph" is specified (without a graphName), the
+names of all graphs are returned. The commands "id", "name",
+"fromtoid", "fromtoname", "ids", "names",
+"fromtoids" and "fromtonames" return the corresponding
+information about the specified edge or currently selected
+edge. The command "edge" takes two icon ids and returns
+the corresponding edge id that connects the two icons.
+.TP
+\fIpathName \fBiconconfigure\fR \fIiconId\fR ?\fIparameters\fR?
+When only a canvas icon id is specified, the parameters for
+that icon are returned. If a certain parameter name is
+selected (e.g. -menu), the value of this parameter is
+returned. When a value is specified as well, the icon
+parameter is set to this new value.
+.TP
+\fIpathName \fBiconcreate\fR \fIiconName\fR \fIparameters\fR
+This command creates a new icon with the name
+"iconName". The parameters are all the parameters that are
+settable for a canvas icon (e.g. -font *times*).
+.TP
+\fIpathName \fBicondelete\fR ?\fIiconList\fR?
+This command deletes all passed icon items (identified by
+their canvas ids) from the tkiconpane. All edges bound to
+the icons are removed as well (if there are edges defined).
+If no icon list is specified, all icons are deleted.
+.TP
+\fIpathName \fBiconinfo\fR \fIcommand\fR ?\fIiconId\fR?
+This command returns various informations on the currently
+selected icon, or the specified icon. The command can be
+"name" (to retrieve the icon name), "state" (to return
+the icon state), "status" (to retrieve the icon status),
+"tags" (to return the tags attached to the icon), "id"
+(to return the id of the selected icon), "selectedids" (to
+return the ids of all icons that are selected) or
+"selectednames" (to return the names of all icons that are
+selected). The command "ids" returns all existing icon
+ids, and the command "names" returns the names of all 
+existing icons. The command "status" can also be used to
+set the icon status. With the command "stateselect", all
+passed icon items are selected. The command "statedeselect"
+deselects the passed icon items, and the command
+"statetoggle" switches the current select status of the icon
+items. If no icon ids are specified for "stateselect",
+"statedeselect" or "statetoggle", the currently selected
+icon is used. 
+.TP
+\fIpathName \fBlayout\fR ?\fIoptions\fR?
+This command re-layouts the tkiconpane. The layout is
+always done (even when the \fB-layout\fR option is set to
+0). To layout only the edges, the option can be set to
+"edges". 
+.TP
+\fIpathName \fBpostscript\fR ?\fIoptions\fR?
+This command is used to dump the contents of the canvas
+to a postscript file. It accepts the same options as
+the canvas postscript command.
+.TP
+\fIpathName \fBstatus\fR ?\fItext\fR?
+This command returns the current status text of the 
+tkiconpane, or sets it to the passed status text.
+.RE
+
+.SH BINDINGS
+.PP
+The tkiconpane widget uses several bindings. In the icon
+area between the icons, the pressing of button 1 displays a
+frame to select groups of icons. Pressing shift together
+with button 1 also displays a frame, but the currently
+selected icons are not deselected. When control is pressed 
+together with button 2, a frame to select the new zoom area
+is displayed. Button 3 pops up the iconpane default menu
+(if there is one). This menu contains global functionality.
+Pressing meta button 3 pops up the alternative iconpane
+menu, and pressing control button 3 pops up the third
+iconpane menu.
+.PP
+The icons also have several bindings. Button 1 selects the
+current icon (deselecting all other icons). Pressing button
+1 together with shift selects the current icon, but does not
+deselect the other icons. A double click with button 1
+starts the icon command for the icon under the mouse
+pointer, or for all selected icons if there are any.
+Pressing button 2 starts the moving of the icons. Pressing
+button 3 pops up the icon menu. Pressing meta button 3 pops
+up the alternative icon menu, and pressing control button 3
+pops up the third icon menu.
+.PP
+If the \fB-bindtype\fR is 1, the pressing of Button 1
+activates the icon command for the icon below the mouse
+pointer. Apart from that the bindings are the same as for
+the default bindings.
+
+.SH BUGS
+.PP
+.\"
+.IP "\(bu"
+Surely, there are many bugs.
+
+.SH KEYWORDS
+widget, icons

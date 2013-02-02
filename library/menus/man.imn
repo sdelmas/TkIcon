@@ -1,0 +1,8 @@
+tixPopupMenu $cbCanvasPath-man \
+  -title "Manual page"
+set cbTmpPopupMenu [$cbCanvasPath-man subwidget menu]
+$cbTmpPopupMenu add command \
+  -command {StageShow Man}\
+  -label {Show}
+
+

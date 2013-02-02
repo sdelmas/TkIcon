@@ -1,0 +1,14 @@
+tixPopupMenu $cbCanvasPath-makefile \
+  -title "Makefile"
+set cbTmpPopupMenu [$cbCanvasPath-makefile subwidget menu]
+$cbTmpPopupMenu add command \
+  -command {StageOpen Makefile prerelease}\
+  -label {Prerelease}
+$cbTmpPopupMenu add command \
+  -command {StageOpen Makefile release}\
+  -label {Release}
+$cbTmpPopupMenu add separator
+$cbTmpPopupMenu add command \
+  -command {StageEdit Makefile}\
+  -label {Edit}
+

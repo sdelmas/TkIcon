@@ -1,0 +1,7 @@
+tixPopupMenu $cbCanvasPath-gif \
+  -title "GIF-file"
+set cbTmpPopupMenu [$cbCanvasPath-gif subwidget menu]
+$cbTmpPopupMenu add command \
+  -command {StageEdit GIF}\
+  -label {Edit}
+

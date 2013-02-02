@@ -1,0 +1,17 @@
+tixPopupMenu $cbCanvasPath-h \
+  -title "H-file"
+set cbTmpPopupMenu [$cbCanvasPath-h subwidget menu]
+$cbTmpPopupMenu add command \
+  -command {StageShow Text}\
+  -label {Show}
+$cbTmpPopupMenu add command \
+  -command {StagePromote}\
+  -label {Promote}
+$cbTmpPopupMenu add command \
+  -command {StageUnPromote}\
+  -label {Unpromote}
+$cbTmpPopupMenu add separator
+$cbTmpPopupMenu add command \
+  -command {StageSave}\
+  -label {Save}
+

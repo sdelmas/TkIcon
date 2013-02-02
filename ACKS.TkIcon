@@ -1,0 +1,26 @@
+Thanks to the people listed here for their help and/or their software :-):
+
+---------------------
+The TkIcon package is based upon the (great) TCL/TK package from:
+John Ousterhout (john.ousterhout@eng.sun.com)
+
+The tree layouting was based upon an algorithm published in the
+package "theObjects" by:
+Juergen Wagner (J_Wagner@iao.fhg.de and gandalf@csli.stanford.edu)
+
+The ISI layouting was based upon a description published by:
+Anette Kjaer (anette@cs.tu-berlin.de)
+
+The shared library support has been derived from the
+tcltk_shlib package written by:
+Xiaokun Zhu (xiaokun@stats.gla.ac.uk)
+
+---------------------
+
+my little sister for massive spellchecking!!
+
+Bill Burdick
+Ritesh Bansal
+
+...
+hopefully YOU with additional ideas !!!

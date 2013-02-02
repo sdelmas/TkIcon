@@ -1,0 +1,25 @@
+global nodeCounter
+global edgeCounter
+global layouter
+set nodeCounter 9
+set edgeCounter 12
+set layouter isi
+
+.layouter iconcreate Node1 -menu1 layouter -status none -text Node1withalonglabel -name Node1 -image standard
+.layouter iconcreate Node2 -menu1 layouter -status none -text Node2 -name Node2 -image standard
+.layouter iconcreate Node3 -menu1 layouter -status none -text Node3 -name Node3 -image standard
+.layouter iconcreate Node4 -menu1 layouter -status none -text Node4 -name Node4 -image standard
+.layouter iconcreate Node5 -menu1 layouter -status none -text Node5withalonglabel -name Node5 -image standard
+.layouter iconcreate Node6 -menu1 layouter -status none -text Node6 -name Node6 -image standard
+.layouter iconcreate Node7 -menu1 layouter -status none -text Node7 -name Node7 -image standard
+.layouter iconcreate Node8 -menu1 layouter -status none -text Node8 -name Node8 -image standard
+.layouter iconcreate Node9 -menu1 layouter -status none -text Node9 -name Node9 -image standard
+.layouter edgecreate [list [.layouter iconinfo id Node4] [.layouter iconinfo id Node3] 1 -menu1 layouter -label Edge12 -name Edge12]
+.layouter edgecreate [list [.layouter iconinfo id Node6] [.layouter iconinfo id Node5] 1 -menu1 layouter -label Edge11 -name Edge11]
+.layouter edgecreate [list [.layouter iconinfo id Node7] [.layouter iconinfo id Node5] 1 -menu1 layouter -label Edge10 -name Edge10]
+.layouter edgecreate [list [.layouter iconinfo id Node1] [.layouter iconinfo id Node2] 1 -menu1 layouter -label Edge1 -name Edge1]
+.layouter edgecreate [list [.layouter iconinfo id Node1] [.layouter iconinfo id Node3] 1 -menu1 layouter -label Edge2 -name Edge2]
+.layouter edgecreate [list [.layouter iconinfo id Node3] [.layouter iconinfo id Node5] 1 -menu1 layouter -label Edge4 -name Edge4]
+.layouter edgecreate [list [.layouter iconinfo id Node5] [.layouter iconinfo id Node2] 1 -menu1 layouter -label Edge5 -name Edge5]
+.layouter edgecreate [list [.layouter iconinfo id Node5] [.layouter iconinfo id Node8] 1 -menu1 layouter -label Edge8 -name Edge8]
+.layouter edgecreate [list [.layouter iconinfo id Node5] [.layouter iconinfo id Node9] 1 -menu1 layouter -label Edge9 -name Edge9]

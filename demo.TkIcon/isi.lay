@@ -1,0 +1,9 @@
+proc LAYOUT_isi {pathName} {
+  global graphorder edgeorder
+
+  [winfo parent $pathName] config -graphorder $graphorder -edgeorder $edgeorder
+  $pathName-graph layout isi -graphorder $graphorder -edgeorder $edgeorder -iconspaceh 20 -iconspacev 5
+}
+
+
+

@@ -1,0 +1,42 @@
+Known bugs in TkIcon:
+
+	- The icons cannot handle multi line text labels.
+
+	- If you build the wish with extended Tcl, you have
+          to set the TCL_LIBRARY path to the extended Tcl
+	  library path before you call the new wish.
+
+	- The configuration and the Makefiles are not very
+	  robust. The automatic detection of dependencies
+	  is not completely implemented (especially across
+	  directories). So, if you want to rebuild the
+	  source tree, it is probably a good idea to call:
+
+		make clean
+
+	  first.
+
+        - If you get an error message about an undefined
+          symbol ___main, you have built your Tk libraries
+          with gcc and the TkSteal code with cc. Please
+          use the same compiler for both packages.
+
+        - If you get the message "Creating archive file
+          '..../libtk/libtk.a'" or a list of undefined
+          symbols starting with "_Tk_", the libtk creation
+          is not working correctly. Please make sure that
+          there is a file "../tk3.6/libtk.a". Then you
+          should check whether the command:
+            "ar r libtk.a *.o"
+          works on your system (in the libtk subdirectory).
+          To do this, please copy the ../tk3.6/libtk.a file
+          manually to the libtk subdirectory, and change to 
+          that subdirectory. After calling the ar command as
+          described above please check the contents of the
+          library (and the size). If the library only
+          contains the local .o files, you may have to adapt
+          the ar command in libtk/Makefile.in and rerun the
+          configuration and the building (after calling "make
+          clean"). Or you did not call "make prepare" before
+          you called "make wish".
+

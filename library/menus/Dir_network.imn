@@ -1,0 +1,7 @@
+tixPopupMenu $cbCanvasPath-Dir_network \
+  -title "Directory network"
+set cbTmpPopupMenu [$cbCanvasPath-Dir_network subwidget menu]
+$cbTmpPopupMenu add command \
+  -command {StageOpen Directory}\
+  -label {Open}
+

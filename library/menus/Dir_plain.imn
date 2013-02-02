@@ -1,0 +1,7 @@
+tixPopupMenu $cbCanvasPath-Dir_plain \
+  -title "Directory"
+set cbTmpPopupMenu [$cbCanvasPath-Dir_plain subwidget menu]
+$cbTmpPopupMenu add command \
+  -command {StageOpen Directory}\
+  -label {Open}
+

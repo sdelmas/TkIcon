@@ -1,0 +1,11 @@
+tixPopupMenu $cbCanvasPath-tcl \
+  -title "Tcl-file"
+set cbTmpPopupMenu [$cbCanvasPath-tcl subwidget menu]
+$cbTmpPopupMenu add command \
+  -command {StageOpen Tcl}\
+  -label {Run}
+$cbTmpPopupMenu add command \
+  -command {StageSave}\
+  -label {Save}
+
+

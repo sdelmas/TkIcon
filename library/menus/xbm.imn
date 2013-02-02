@@ -1,0 +1,7 @@
+tixPopupMenu $cbCanvasPath-xbm \
+  -title "XBM-file"
+set cbTmpPopupMenu [$cbCanvasPath-xbm subwidget menu]
+$cbTmpPopupMenu add command \
+  -command {StageEdit Xbm}\
+  -label {Edit}
+

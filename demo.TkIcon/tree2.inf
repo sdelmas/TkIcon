@@ -1,0 +1,42 @@
+global nodeCounter
+global edgeCounter
+global layouter
+set nodeCounter 19
+set edgeCounter 19
+set layouter isi
+
+.layouter iconcreate Node1 -textanchor n -borderwidth 2 -menu1 layouter -status none -text Node1 -name Node1 -image standard
+.layouter iconcreate Node2 -textanchor w -borderwidth 2 -menu1 layouter -status none -text Node2 -name Node2 -image standard
+.layouter iconcreate Node3 -textanchor e -borderwidth 2 -menu1 layouter -status none -text Node3 -name Node3 -image standard
+.layouter iconcreate Node4 -textanchor s -borderwidth 2 -menu1 layouter -status none -text Node4 -name Node4 -image standard
+.layouter iconcreate Node5 -textanchor nw -borderwidth 2 -menu1 layouter -status none -text Node5 -name Node5 -image standard
+.layouter iconcreate Node6 -textanchor ne -borderwidth 2 -menu1 layouter -status none -text Node6 -name Node6 -image standard
+.layouter iconcreate Node7 -textanchor sw -borderwidth 2 -menu1 layouter -status none -text Node7 -name Node7 -image standard
+.layouter iconcreate Node8 -textanchor se -borderwidth 2 -menu1 layouter -status none -text Node8 -name Node8 -image standard
+.layouter iconcreate Node9 -textanchor c -borderwidth 2 -menu1 layouter -status none -text Node9 -name Node9 -image standard
+.layouter iconcreate Node10 -menu1 layouter -status none -text Node10 -name Node10 -image standard
+.layouter iconcreate Node11 -menu1 layouter -status none -text Node11 -name Node11 -image standard
+.layouter iconcreate Node12 -menu1 layouter -status none -text Node12 -name Node12 -image standard
+.layouter iconcreate Node13 -menu1 layouter -status none -text Node13 -name Node13 -image standard
+.layouter iconcreate Node14 -menu1 layouter -status none -text Node14 -name Node14 -image standard
+.layouter iconcreate Node15 -menu1 layouter -status none -text Node15 -name Node15 -image standard
+.layouter iconcreate Node16 -menu1 layouter -status none -text Node16 -name Node16 -image standard
+.layouter iconcreate Node17 -menu1 layouter -status none -text Node17 -name Node17 -image standard
+.layouter iconcreate Node18 -menu1 layouter -status none -text Node18 -name Node18 -image standard
+.layouter edgecreate [list [.layouter iconinfo id Node4] [.layouter iconinfo id Node18] 1 -menu1 layouter -label Edge18 -name Edge18]
+.layouter edgecreate [list [.layouter iconinfo id Node11] [.layouter iconinfo id Node15] 1 -menu1 layouter -label Edge17 -name Edge17]
+.layouter edgecreate [list [.layouter iconinfo id Node11] [.layouter iconinfo id Node16] 1 -menu1 layouter -label Edge16 -name Edge16]
+.layouter edgecreate [list [.layouter iconinfo id Node11] [.layouter iconinfo id Node17] 1 -menu1 layouter -label Edge15 -name Edge15]
+.layouter edgecreate [list [.layouter iconinfo id Node1] [.layouter iconinfo id Node2] 1 -menu1 layouter -label Edge1 -name Edge1]
+.layouter edgecreate [list [.layouter iconinfo id Node1] [.layouter iconinfo id Node3] 1 -menu1 layouter -label Edge2 -name Edge2]
+.layouter edgecreate [list [.layouter iconinfo id Node1] [.layouter iconinfo id Node4] 1 -menu1 layouter -label Edge3 -name Edge3]
+.layouter edgecreate [list [.layouter iconinfo id Node2] [.layouter iconinfo id Node5] 1 -menu1 layouter -label Edge4 -name Edge4]
+.layouter edgecreate [list [.layouter iconinfo id Node2] [.layouter iconinfo id Node6] 1 -menu1 layouter -label Edge5 -name Edge5]
+.layouter edgecreate [list [.layouter iconinfo id Node6] [.layouter iconinfo id Node7] 1 -menu1 layouter -label Edge6 -name Edge6]
+.layouter edgecreate [list [.layouter iconinfo id Node3] [.layouter iconinfo id Node8] 1 -menu1 layouter -label Edge7 -name Edge7]
+.layouter edgecreate [list [.layouter iconinfo id Node3] [.layouter iconinfo id Node9] 1 -menu1 layouter -label Edge8 -name Edge8]
+.layouter edgecreate [list [.layouter iconinfo id Node3] [.layouter iconinfo id Node10] 1 -menu1 layouter -label Edge9 -name Edge9]
+.layouter edgecreate [list [.layouter iconinfo id Node4] [.layouter iconinfo id Node11] 1 -menu1 layouter -label Edge10 -name Edge10]
+.layouter edgecreate [list [.layouter iconinfo id Node11] [.layouter iconinfo id Node12] 1 -menu1 layouter -label Edge11 -name Edge11]
+.layouter edgecreate [list [.layouter iconinfo id Node3] [.layouter iconinfo id Node13] 1 -menu1 layouter -label Edge13 -name Edge13]
+.layouter edgecreate [list [.layouter iconinfo id Node3] [.layouter iconinfo id Node14] 1 -menu1 layouter -label Edge14 -name Edge14]

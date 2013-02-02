@@ -1,0 +1,11 @@
+tixPopupMenu $cbCanvasPath-o \
+  -title "O-file"
+set cbTmpPopupMenu [$cbCanvasPath-o subwidget menu]
+$cbTmpPopupMenu add command \
+  -command {StageShow O}\
+  -label {Show}
+$cbTmpPopupMenu add separator
+$cbTmpPopupMenu add command \
+  -command {StageSave}\
+  -label {Save}
+

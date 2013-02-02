@@ -1,0 +1,8 @@
+tixPopupMenu $cbCanvasPath-standard \
+  -title "Layout Methods"
+set cbTmpPopupMenu [$cbCanvasPath-standard subwidget menu]
+$cbTmpPopupMenu add command \
+  -command {[cbIconPane::info tkiconpane] layout} \
+  -label {Relayout} 
+
+

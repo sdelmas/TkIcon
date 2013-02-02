@@ -1,0 +1,9 @@
+proc LAYOUT_tree {pathName} {
+  global graphorder edgeorder
+
+  [winfo parent $pathName] config -graphorder $graphorder -edgeorder $edgeorder
+  $pathName-graph layout tree -graphorder $graphorder -edgeorder $edgeorder
+}
+
+
+

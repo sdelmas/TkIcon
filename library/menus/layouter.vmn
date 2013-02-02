@@ -1,0 +1,62 @@
+tixPopupMenu $cbCanvasPath-layouter \
+  -title "Layout Methods"
+set cbTmpPopupMenu [$cbCanvasPath-layouter subwidget menu]
+$cbTmpPopupMenu add command \
+  -command {[tkIconPane::info iconpane] layout} \
+  -label {Relayout} 
+$cbTmpPopupMenu add separator
+$cbTmpPopupMenu add checkbutton \
+  -label {Graph Order} \
+  -variable graphorder \
+  -offvalue 0 \
+  -onvalue 1
+$cbTmpPopupMenu add checkbutton \
+  -label {Edge Order} \
+  -variable edgeorder \
+  -offvalue 0 \
+  -onvalue 1
+$cbTmpPopupMenu add separator
+$cbTmpPopupMenu add command \
+  -command {
+    incr nodeCounter
+    [tkIconPane::info iconpane] iconcreate Node$nodeCounter \
+      -menu1 layouter \
+      -status none \
+      -text Node$nodeCounter \
+      -image standard
+    [tkIconPane::info iconpane] layout} \
+  -label {Add node} 
+$cbTmpPopupMenu add separator
+$cbTmpPopupMenu add command \
+  -label {Best fit} \
+  -command {[tkIconPane::info iconpane] config -scale -1}
+$cbTmpPopupMenu add command \
+  -label {Scale 0.3} \
+  -command {[tkIconPane::info iconpane] config -scale 0.3}
+$cbTmpPopupMenu add command \
+  -label {Scale 0.6} \
+  -command {[tkIconPane::info iconpane] config -scale 0.6}
+$cbTmpPopupMenu add command \
+  -label {Scale normal} \
+  -command {[tkIconPane::info iconpane] config -scale 1.0}
+$cbTmpPopupMenu add command \
+  -label {Scale 2.2} \
+  -command {[tkIconPane::info iconpane] config -scale 2.2}
+$cbTmpPopupMenu add command \
+  -label {Scale 3.3} \
+  -command {[tkIconPane::info iconpane] config -scale 3.3}
+$cbTmpPopupMenu add separator
+$cbTmpPopupMenu add command \
+  -command {
+    set bbox [[[tkIconPane::info iconpane] subwidget canvas] bbox all]
+    [[tkIconPane::info iconpane] subwidget canvas] postscript \
+      -file dump.ps \
+      -colormode color \
+      -height [expr [lindex $bbox 3]-[lindex $bbox 1]] \
+      -width [expr [lindex $bbox 2]-[lindex $bbox 0]] \
+      -x [lindex $bbox 0] \
+      -y [lindex $bbox 1]
+    } \
+  -label {Dump to PS} 
+
+

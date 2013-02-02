@@ -1,0 +1,7 @@
+tixPopupMenu $cbCanvasPath-Exe_plain \
+  -title "Executable"
+set cbTmpPopupMenu [$cbCanvasPath-Exe_plain subwidget menu]
+$cbTmpPopupMenu add command \
+  -command {StageOpen Executable}\
+  -label {Run}
+

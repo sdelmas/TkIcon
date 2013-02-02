@@ -1,0 +1,349 @@
+'\"
+'\" Copyright 1995 Sven Delmas
+'\" All rights reserved.
+'\" See the file COPYRIGHT for the copyright notes.
+'\"
+'\" $Header: tkicon.n[6.0] Tue Jul 18 16:30:11 1995 sven@(none) frozen $
+'\" 
+'\" The manual page is based upon the manual page style from:
+'\"
+'\" Copyright (c) 1993 The Regents of the University of California.
+'\" Copyright (c) 1994 Sun Microsystems, Inc.
+'\"
+'\" See the file "license.terms" for information on usage and redistribution
+'\" of this file, and for a DISCLAIMER OF ALL WARRANTIES. This file is
+'\" part of the Tk distribution and is included in the file COPYRIGHT.
+'\" 
+'\" The definitions below are for supplemental macros used in Tcl/Tk
+'\" manual entries.
+'\"
+'\" .HS name section [date [version]]
+'\"	Replacement for .TH in other man pages.  See below for valid
+'\"	section names.
+'\"
+'\" .AP type name in/out [indent]
+'\"	Start paragraph describing an argument to a library procedure.
+'\"	type is type of argument (int, etc.), in/out is either "in", "out",
+'\"	or "in/out" to describe whether procedure reads or modifies arg,
+'\"	and indent is equivalent to second arg of .IP (shouldn't ever be
+'\"	needed;  use .AS below instead)
+'\"
+'\" .AS [type [name]]
+'\"	Give maximum sizes of arguments for setting tab stops.  Type and
+'\"	name are examples of largest possible arguments that will be passed
+'\"	to .AP later.  If args are omitted, default tab stops are used.
+'\"
+'\" .BS
+'\"	Start box enclosure.  From here until next .BE, everything will be
+'\"	enclosed in one large box.
+'\"
+'\" .BE
+'\"	End of box enclosure.
+'\"
+'\" .VS
+'\"	Begin vertical sidebar, for use in marking newly-changed parts
+'\"	of man pages.
+'\"
+'\" .VE
+'\"	End of vertical sidebar.
+'\"
+'\" .DS
+'\"	Begin an indented unfilled display.
+'\"
+'\" .DE
+'\"	End of indented unfilled display.
+'\"
+'\" @(#) man.macros 1.1 94/08/09 13:07:19
+.\"
+'\"	# Heading for Tcl/Tk man pages
+.de HS
+.ds ^3 \\0
+.if !"\\$3"" .ds ^3 \\$3
+.if '\\$2'cmds'      .TH "\\$1" 1 "\\*(^3" "\\$4" "\\$5"
+.if '\\$2'lib'       .TH "\\$1" 3 "\\*(^3" "\\$4" "\\$5"
+.if '\\$2'ncmds'     .TH "\\$1" n "\\*(^3" "\\$4" "\\$5"
+.if '\\$2'tcl'       .TH "\\$1" n "\\*(^3"  Tcl   "Tcl Built-In Commands"
+.if '\\$2'tk'        .TH "\\$1" n "\\*(^3"  Tk    "Tk Commands"
+.if '\\$2'tclc'      .TH "\\$1" 3 "\\*(^3"  Tcl   "Tcl Library Procedures"
+.if '\\$2'tkc'       .TH "\\$1" 3 "\\*(^3"  Tk    "Tk Library Procedures"
+.if '\\$2'tclcmds'   .TH "\\$1" 1 "\\*(^3"  Tk    "Tcl Applications"
+.if '\\$2'tkcmds'    .TH "\\$1" 1 "\\*(^3"  Tk    "Tk Applications"
+.if t .wh -1.3i ^B
+.nr ^l \\n(.l
+.ad b
+..
+'\"	# Start an argument description
+.de AP
+.ie !"\\$4"" .TP \\$4
+.el \{\
+.   ie !"\\$2"" .TP \\n()Cu
+.   el          .TP 15
+.\}
+.ie !"\\$3"" \{\
+.ta \\n()Au \\n()Bu
+\&\\$1	\\fI\\$2\\fP	(\\$3)
+.\".b
+.\}
+.el \{\
+.br
+.ie !"\\$2"" \{\
+\&\\$1	\\fI\\$2\\fP
+.\}
+.el \{\
+\&\\fI\\$1\\fP
+.\}
+.\}
+..
+'\"	# define tabbing values for .AP
+.de AS
+.nr )A 10n
+.if !"\\$1"" .nr )A \\w'\\$1'u+3n
+.nr )B \\n()Au+15n
+.\"
+.if !"\\$2"" .nr )B \\w'\\$2'u+\\n()Au+3n
+.nr )C \\n()Bu+\\w'(in/out)'u+2n
+..
+'\"	# BS - start boxed text
+'\"	# ^y = starting y location
+'\"	# ^b = 1
+.de BS
+.br
+.mk ^y
+.nr ^b 1u
+.if n .nf
+.if n .ti 0
+.if n \l'\\n(.lu\(ul'
+.if n .fi
+..
+'\"	# BE - end boxed text (draw box now)
+.de BE
+.nf
+.ti 0
+.mk ^t
+.ie n \l'\\n(^lu\(ul'
+.el \{\
+.\"	Draw four-sided box normally, but don't draw top of
+.\"	box if the box started on an earlier page.
+.ie !\\n(^b-1 \{\
+\h'-1.5n'\L'|\\n(^yu-1v'\l'\\n(^lu+3n\(ul'\L'\\n(^tu+1v-\\n(^yu'\l'|0u-1.5n\(ul'
+.\}
+.el \}\
+\h'-1.5n'\L'|\\n(^yu-1v'\h'\\n(^lu+3n'\L'\\n(^tu+1v-\\n(^yu'\l'|0u-1.5n\(ul'
+.\}
+.\}
+.fi
+.br
+.nr ^b 0
+..
+'\"	# VS - start vertical sidebar
+'\"	# ^Y = starting y location
+'\"	# ^v = 1 (for troff;  for nroff this doesn't matter)
+.de VS
+.mk ^Y
+.ie n 'mc \s12\(br\s0
+.el .nr ^v 1u
+..
+'\"	# VE - end of vertical sidebar
+.de VE
+.ie n 'mc
+.el \{\
+.ev 2
+.nf
+.ti 0
+.mk ^t
+\h'|\\n(^lu+3n'\L'|\\n(^Yu-1v\(bv'\v'\\n(^tu+1v-\\n(^Yu'\h'-|\\n(^lu+3n'
+.sp -1
+.fi
+.ev
+.\}
+.nr ^v 0
+..
+'\"	# Special macro to handle page bottom:  finish off current
+'\"	# box/sidebar if in box/sidebar mode, then invoked standard
+'\"	# page bottom macro.
+.de ^B
+.ev 2
+'ti 0
+'nf
+.mk ^t
+.if \\n(^b \{\
+.\"	Draw three-sided box if this is the box's first page,
+.\"	draw two sides but no top otherwise.
+.ie !\\n(^b-1 \h'-1.5n'\L'|\\n(^yu-1v'\l'\\n(^lu+3n\(ul'\L'\\n(^tu+1v-\\n(^yu'\h'|0u'\c
+.el \h'-1.5n'\L'|\\n(^yu-1v'\h'\\n(^lu+3n'\L'\\n(^tu+1v-\\n(^yu'\h'|0u'\c
+.\}
+.if \\n(^v \{\
+.nr ^x \\n(^tu+1v-\\n(^Yu
+\kx\h'-\\nxu'\h'|\\n(^lu+3n'\ky\L'-\\n(^xu'\v'\\n(^xu'\h'|0u'\c
+.\}
+.bp
+'fi
+.ev
+.if \\n(^b \{\
+.mk ^y
+.nr ^b 2
+.\}
+.if \\n(^v \{\
+.mk ^Y
+.\}
+..
+'\"	# DS - begin display
+.de DS
+.RS
+.nf
+.sp
+..
+'\"	# DE - end display
+.de DE
+.fi
+.RE
+.sp
+..
+.HS tkicon cmds
+.BS
+'\" Note:  do not modify the .SH NAME line immediately below!
+.SH NAME
+tkicon \- Create and manipulate icons, edges, graphs in canvas
+widgets
+.SH SYNOPSIS
+\fBtkgraph\fI \fIcommand \fR?\fIoptions\fR?
+\fBcanvasWidget\fI create icon x y \fR?\fIoption value ...\fR?
+\fBcanvasWidget\fI create edge x y \fR?\fIoption value ...\fR?
+
+.SH TKGRAPH
+.PP
+The \fBtkgraph\fR command is used to create (manipulate) a graph
+structure for a specific widget. A graph structure is a Tcl object
+that, under a certain name, allows the layouting of a set of
+canvas objects following various layout algorithms. The following
+tkgraph commands are possible:
+.TP
+\fItkgraph \fBcreate graphName\fR ?\fIoption value ...\fR?
+This command creates a new graph. By using the optional
+-canvas option, the graph can be attached to a specific
+canvas. It this is not done the graph has to be attached
+to a canvas the dirst time the graph command is used.
+.TP
+\fItkgraph \fBnames\fR
+This command returns the list of all known graphs in the
+current Tcl interpreter.
+.RE
+
+.SH "GRAPH STRUCTURE COMMAND"
+.PP
+The graph name (represented by a Tcl command) may be used to
+invoke various operations on the graph. It has the following
+general form:
+.DS C
+\fIgraphName option \fR?\fIarg arg ...\fR?
+.DE
+\fIGraphName\fR is the name of the command. \fIOption\fR and
+the \fIarg\fRs determine the exact behavior of the command.
+The following commands are possible for graphs:
+.TP
+\fIgraphName \fBedgeinfo command\fR ?\fIoptions\fR?
+This command retrieves informations about the edges in the
+graph. There are several minor commmands that specify which
+information to retrieve.
+.TP 2
+\fIgraphName \fBedgeinfo ids\fR ?\fIgraphName\fR?
+Returns the list of all edge canvas ids in the canvas. If a
+graphName is specified, the list will only contain edge ids
+attached to the specified graph.
+.TP 2
+\fIgraphName \fBedgeinfo names\fR ?\fIgraphName\fR?
+Returns the list of all edge names in the canvas. If a
+graphName is specified, the list will only contain edge
+names attached to the specified graph.
+.TP 2
+\fIgraphName \fBedgeinfo graphs\fR
+Returns the list of all graphs in the canvas attached to this
+graph.
+.TP 2
+\fIgraphName \fBedgeinfo id fromIcon toIcon\fR
+Returns the edge id that connects the both specified icons.
+.TP
+\fIgraphName \fBiconinfo command\fR ?\fIoptions\fR?
+This command retrieves informations about the icons in the
+graph. There are several minor commmands that specify which
+information to retrieve.
+.TP 2
+\fIgraphName \fBiconinfo ids\fR
+Returns the list of all icon canvas ids in the canvas.
+.TP 2
+\fIgraphName \fBiconinfo names\fR
+Returns the list of all icon names in the canvas.
+graph.
+.TP 2
+\fIgraphName \fBiconinfo id iconName\fR
+Returns the icon id of the specified icon name.
+.TP
+\fIgraphName \fBlayout type\fR ?\fIoption value ...\fR?
+This command performs a layouting on the given graph structure.
+The type determines what kind of layout is done. Possible values
+are: edges (to just reposition the edges), isi (for ISI layout),
+matrix (for a plain matrix layout), random (for random placement),
+tree (for a simple tree layout). The layouting can be configured
+using additional options. Possible options are:
+.TP 2
+\fI-computeiconsize\fR
+The layouter will set the space used by all icons to be size
+of the biggest icon.
+\fI-edgeorder (isi, \fR
+The order for the layouting. 1 means order 
+\fI-edgeheight (isi,\fR
+The height of all edges.
+\fI-edgewidth (isi, \fR
+The width of all edges.
+\fI-elementsperline\fR
+For matrix layout, this option specifies how many elements 
+per line should be allowed. If this option is not specified,
+the layouting will place as many elements in one line as
+fit there.
+\fI-iconheight (isi, \fR
+The height of all elements.
+\fI-iconspaceh (isi, \fR
+Additional horizontal offset between the elements.
+\fI-iconspacev (isi, \fR
+Additional vertical offset between the elements.
+\fI-iconwidth (isi, \fR
+The width of all elements.
+\fI-idlist\fR
+The list of items to layout. By default all items of the
+specified type are layouted.
+\fI-keeprandompositions (random, \fR
+Setting this to 1 means that elements are only placed
+randomly if their current position is -1 -1. Otherwise
+they keep their current position.
+\fI-layouttypes (isi, \fR
+The element types to be layouted. By default only icons
+are layouted. I neccessary other canvas item types can 
+also be layouted.
+\fI-maxx (random, \fR
+The maximum x position for randomly placed elements.
+\fI-maxy (random, \fR
+The maximum y position for randomly placed elements.
+\fI-graphorder\fR
+\fI-rootid (isi, \fR
+This selects a specific element as the root element
+for the layouting.
+\fI-sortcommand (matrix, \fR
+A command that is used to determine the order of
+the elements to be layouted. The procedure gets
+two parameters which are the 
+\fI-xoffset (isi, \fR
+The additional x offset from the upper left corner
+for the placed elements. 
+\fI-yoffset (isi, \fR
+The additional y offset from the upper left corner
+for the placed elements. 
+.RE
+
+.SH BUGS
+.PP
+.\"
+.IP "\(bu"
+Surely, there are many bugs.
+
+.SH KEYWORDS
+widget, icon, edge, layout

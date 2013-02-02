@@ -1,0 +1,22 @@
+tixPopupMenu $cbCanvasPath-layouter \
+  -title "Icon"
+set cbTmpPopupMenu [$cbCanvasPath-layouter subwidget menu]
+$cbTmpPopupMenu add command \
+  -command {
+    incr edgeCounter
+    [tkIconPane::info iconpane] edgecreate [list [tkIconPane::info iconinfo selectedids] [tkIconPane::info iconinfo id] 1 -menu1 layouter -label Edge$edgeCounter -name Edge$edgeCounter]} \
+  -label {Connect}
+$cbTmpPopupMenu add separator
+$cbTmpPopupMenu add command \
+  -command {
+    puts stdout "id=[tkIconPane::info iconinfo id]"} \
+  -label {Id}
+$cbTmpPopupMenu add command \
+  -command {
+    puts stdout "x=[lindex [[tkIconPane::info iconpane] iconconfig [tkIconPane::info iconinfo id] -x] 4] y=[lindex [[tkIconPane::info iconpane] iconconfig [tkIconPane::info iconinfo id] -y] 4]"} \
+  -label {Position}
+$cbTmpPopupMenu add command \
+  -command {
+    [tkIconPane::info iconpane] icondelete [tkIconPane::info iconinfo id]} \
+  -label {Remove}
+

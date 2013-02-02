@@ -1,0 +1,221 @@
+#---------------------------------------------------------------------------
+#
+#	Simple DAG Layouter Function
+#
+#	This procedure receives a list of precedences and builds a DAG
+#	structure with coordinates suitable for the DAG widget. It is
+#	derived from the respective LISP counterpart and should probably
+#	be implemented in C for efficiency.
+#
+#	List: { {node succ...} ...}
+#
+
+proc LAYOUT_simpleDAG {pathName} {
+  set root ""
+  set result ""
+  foreach counter [$pathName find all] {
+    if {"[$pathName type $counter]" == "icon"} {
+      set res ""
+      set tmpRoot $counter
+      foreach line [lindex [$pathName itemconfig $counter -edges] 4] {
+        if {"[lindex $line 1]" != "$counter"} {
+          lappend res [lindex $line 1]
+        }
+        if {"[lindex $line 1]" == "$counter"} {
+          set tmpRoot ""
+        }
+      }
+      if {"$root" == "" && "$tmpRoot" != ""} {
+        set root $tmpRoot
+      }
+      if {"$res" != ""} {
+        lappend result [eval list $counter $res]
+      }
+    }
+  }
+  DAG_computeLayout $pathName $root $result
+  $pathName-graph layout edges
+  internalAdjustItems [winfo parent $pathName]
+}
+
+proc DAG_computeLayout {pathName roots list} {
+  global __dag
+
+  # Initialize the global variables (ugh! these should be slot values).
+  catch {unset __dag}
+  set __dag(n) -1
+  set __dag(list) $list
+  set __dag(margin) 10
+  set __dag(imargin) 1
+  set __dag(link) 40
+  set __dag(sep) 10
+  set depth 200
+
+  # Build the graph structure
+  set rids {}
+  foreach root $roots {
+    lappend rids [DAG__traverse [assoca $root $list] $depth]
+  }
+
+  # Compute a topological order
+  set __dag(order) {}
+  foreach rootid $rids {
+    DAG__topological $rootid
+  }
+
+  # Compute the Y layout (vertical arrangement)
+  set __dag(F) 0
+  set __dag(y) 4
+  foreach rootid $rids {
+    DAG__layoutYLR $pathName $rootid
+  }
+
+  # Compute the X layout (horizontal arrangement)
+  foreach n $__dag(order) {
+    DAG__layoutXLR $pathName $n
+  }
+
+  foreach n $__dag(order) {
+    $pathName coords $__dag(N$n) $__dag(X$n) $__dag(YE$n)
+  }
+  unset __dag
+}
+
+proc DAG__traverse {node depth} {
+  global __dag
+
+  if { $depth <= 0} {
+    return
+  } elseif { $depth != {} } {
+    incr depth -1
+  }
+  set name [lindex $node 0]
+
+  if { [info exists __dag(I$name)] } {
+    return
+  }
+
+  set succ [lrange $node 1 end]
+  set n [incr __dag(n)]
+  set __dag(N$n) $name
+  set __dag(P$n) {}
+  set __dag(S$n) {}
+  set __dag(F$n) 0
+  set __dag(X$n) {}
+  set __dag(Y$n) {}
+  set __dag(I$name) $n
+
+  foreach child $succ {
+    if { [info exists __dag(I$child)] } {
+      set m $__dag(I$child)
+    } {
+      set next [assoca $child $__dag(list)]
+      if { $next == {} } {
+	set next [list $child]
+      }
+      set m [DAG__traverse $next $depth]
+    }
+    lappend __dag(S$n) $m
+    lappend __dag(P$m) $n
+  }
+
+  return $n
+}
+
+proc DAG__topological {n} {
+  global __dag
+
+  if { $__dag(F$n) } {
+    return
+  }
+
+  foreach pred $__dag(P$n) {
+    if { ! $__dag(F$pred) } {
+      return
+    }
+  }
+
+  lappend __dag(order) $n
+  set __dag(F$n) 1
+
+  foreach succ $__dag(S$n) {
+    DAG__topological $succ
+  }
+
+  return
+}
+
+proc DAG__layoutYLR {pathName n} {
+  global __dag
+
+  if { $__dag(Y$n) == {} } {
+    set pred [lindex $__dag(P$n) 0]
+    if { $pred != {} && $__dag(F$pred) } {
+      set __dag(F$pred) 0
+      set __dag(Y$n) $__dag(Y$pred)
+    } {
+      set __dag(Y$n) $__dag(y)
+    }
+
+    set bbox [$pathName bbox $__dag(N$n)]
+    set __dag(YE$n) \
+      [expr $__dag(Y$n)+([lindex $bbox 3]-[lindex $bbox 1])+$__dag(imargin)]
+    set y [expr $__dag(YE$n)+$__dag(sep)]
+    if { $y > $__dag(y) } {
+      set __dag(y) $y
+    }
+
+    foreach succ $__dag(S$n) {
+      DAG__layoutYLR $pathName $succ
+    }
+  }
+}
+
+proc DAG__layoutXLR {pathName n} {
+  global __dag
+
+  set max $__dag(margin)
+  foreach pred $__dag(P$n) {
+    if { $__dag(XE$pred) > $max } {
+      set max $__dag(XE$pred)
+    }
+  }
+  set link 40
+  foreach edge [lindex [$pathName itemconf $__dag(N$n) -edges] 4] {
+    set name [lindex [$pathName itemconf [lindex $edge 2] -label] 4]
+    if {[expr [string length $name]*10] > $link} {
+      set link [expr [string length $name]*10]
+    }
+  }
+  set __dag(X$n) [expr $max+$link]
+
+  set bbox [$pathName bbox $__dag(N$n)]
+  set __dag(XE$n) \
+    [expr $__dag(X$n)+(([lindex $bbox 2]-[lindex $bbox 0])*$__dag(imargin))]
+
+  return $__dag(XE$n)
+}
+
+proc assoca {key alist} {
+  foreach pair $alist {
+    if { [lindex $pair 0] == $key } {
+      return $pair
+    }
+  }
+  return {}
+}
+
+proc internalAdjustItems {pathName} {
+  global tkiconpane_priv
+
+  set canvasPath $pathName.cbcanvas
+  set bbox [$canvasPath bbox all]
+  if {"$bbox" != ""} {
+    if {[lindex $bbox 0] != 10 && [lindex $bbox 0] != 10} {
+      $canvasPath move all [expr 10-[lindex $bbox 0]] [expr 10-[lindex $bbox 1]]
+    }
+  }
+}
+
+
+

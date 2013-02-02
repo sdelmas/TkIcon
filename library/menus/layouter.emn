@@ -1,0 +1,17 @@
+tixPopupMenu $cbCanvasPath-layouter \
+  -title "Edge"
+set cbTmpPopupMenu [$cbCanvasPath-layouter subwidget menu]
+$cbTmpPopupMenu add command \
+  -command {
+    puts stdout [tkIconPane::info edgeinfo id]} \
+  -label {Id}
+$cbTmpPopupMenu add command \
+  -command {
+    puts stdout [[tkIconPane::info canvas] coords [tkIconPane::info edgeinfo id]]} \
+  -label {Position}
+$cbTmpPopupMenu add command \
+  -command {
+    [tkIconPane::info iconpane] edgedelete [tkIconPane::info edgeinfo id]} \
+  -label {Remove}
+
+

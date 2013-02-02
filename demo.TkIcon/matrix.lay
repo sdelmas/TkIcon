@@ -1,0 +1,8 @@
+proc LAYOUT_matrix {pathName} {
+  global graphorder edgeorder
+
+  [winfo parent $pathName] config -graphorder $graphorder -edgeorder $edgeorder
+  $pathName-graph layout matrix -graphorder $graphorder -edgeorder $edgeorder
+}
+
+
